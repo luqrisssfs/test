@@ -1,0 +1,12 @@
+name: Ping Machine
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ping-machine:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Machine
+        run: |
+          ping -c google.com.ar
