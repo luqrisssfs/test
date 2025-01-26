@@ -1,0 +1,19 @@
+on:
+  workflow_dispatch:
+    inputs:
+      machine_name:
+        description: "Nombre de la máquina o dirección IP para hacer ping"
+        required: true
+      count:
+        description: "Número de paquetes de ping"
+        required: false
+        default: "4"
+
+jobs:
+  dynamic-ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Machine
+        run: |
+          echo "Haciendo ping a ${{ github.event.inputs.machine_name }} con ${{ github.event.inputs.count }} paquetes"
+          ping -c ${{ github.event.inputs.count }} ${{ github.event.inputs.machine_name }}
