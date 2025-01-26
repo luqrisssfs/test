@@ -9,4 +9,4 @@ jobs:
     steps:
       - name: Ping Machine
         run: |
-          ping -c google.com.ar
+          ping -c 216.58.202.67
