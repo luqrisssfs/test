@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write   # Permisos para modificar archivos, incluidos los workflows
-  workflows: write  # Permisos específicos para modificar workflows
 
 jobs:
   leer_archivos:
