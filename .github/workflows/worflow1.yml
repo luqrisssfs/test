@@ -1,0 +1,75 @@
+name: Primer Workflow - Leer y actualizar el YAML
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  leer_archivos:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      - name: Leer lista1.txt
+        id: leer_lista1
+        run: |
+          lista1=$(cat lista1.txt)
+          echo "Lista 1: $lista1"
+          echo "::set-output name=lista1::$lista1"
+
+      - name: Leer lista2.txt
+        id: leer_lista2
+        run: |
+          lista2=$(cat lista2.txt)
+          echo "Lista 2: $lista2"
+          echo "::set-output name=lista2::$lista2"
+
+      - name: Modificar el archivo YAML con los valores de lista1 y lista2
+        run: |
+          # Leer las salidas de lista1 y lista2
+          lista1="${{ steps.leer_lista1.outputs.lista1 }}"
+          lista2="${{ steps.leer_lista2.outputs.lista2 }}"
+
+          # Modificar el archivo YAML del segundo workflow
+          cat <<EOF > .github/workflows/workflow2.yml
+          name: Segundo Workflow - Selección de listas
+
+          on:
+            workflow_dispatch:
+              inputs:
+                lista1:
+                  description: 'Selecciona una opción de lista1'
+                  required: true
+                  type: choice
+                  options:
+                    - "$lista1"
+                lista2:
+                  description: 'Selecciona una opción de lista2'
+                  required: true
+                  type: choice
+                  options:
+                    - "$lista2"
+
+          jobs:
+            job2:
+              runs-on: ubuntu-latest
+              steps:
+                - name: Checkout del código
+                  uses: actions/checkout@v3
+                - name: Imprimir selección
+                  run: |
+                    echo "Se seleccionó: Lista1 - $lista1, Lista2 - $lista2"
+          EOF
+
+      - name: Commit y push del archivo YAML modificado
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .github/workflows/workflow2.yml
+          git commit -m "Actualizar inputs de lista1 y lista2"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
