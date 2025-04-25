@@ -1,46 +1,56 @@
-name: Actualizar y elegir listas
+name: Selección de listas desde archivos
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      lista1:
+        description: 'Selecciona una opción de lista1'
+        required: true
+        type: choice
+        options: []  # Se llenará con el contenido de lista1.txt
+      lista2:
+        description: 'Selecciona una opción de lista2'
+        required: true
+        type: choice
+        options: []  # Se llenará con el contenido de lista2.txt
 
 jobs:
-  # Job 1: Actualizar lista1 y lista2
-  actualizar_listas:
+  # Job 1: Leer archivos lista1.txt y lista2.txt
+  leer_archivos:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout del código
         uses: actions/checkout@v3
 
-      - name: Actualizar lista1
+      - name: Leer lista1.txt
+        id: lista1
         run: |
-          echo "Opción 1" >> lista1.txt
-          echo "Opción 2" >> lista1.txt
+          # Leer el contenido de lista1.txt y guardarlo en una variable
+          echo "::set-output name=lista1::$(cat lista1.txt)"
 
-      - name: Actualizar lista2
+      - name: Leer lista2.txt
+        id: lista2
         run: |
-          echo "Opción A" >> lista2.txt
-          echo "Opción B" >> lista2.txt
+          # Leer el contenido de lista2.txt y guardarlo en una variable
+          echo "::set-output name=lista2::$(cat lista2.txt)"
 
-  # Job 2: Elegir entre las opciones de lista1 y lista2
-  elegir_lista:
-    needs: actualizar_listas
+  # Job 2: Seleccionar una opción
+  seleccionar_opcion:
+    needs: leer_archivos
     runs-on: ubuntu-latest
     steps:
       - name: Checkout del código
         uses: actions/checkout@v3
 
-      - name: Leer lista1 y lista2
+      - name: Imprimir las opciones de lista1 y lista2
         run: |
-          echo "Selecciona entre las opciones de lista1 y lista2:"
-          echo "Contenido de lista1:"
+          echo "Contenido de lista1.txt:"
           cat lista1.txt
-          echo "Contenido de lista2:"
+          echo "Contenido de lista2.txt:"
           cat lista2.txt
 
-      - name: Elegir opción (simulación)
+      - name: Crear entradas de selección (simulación)
         run: |
-          # Simulación de elegir entre lista1 y lista2
-          selected_option="Opción 1"  # Puedes cambiar esto según tu lógica
-          echo "Has elegido: $selected_option"
+          # Este paso es solo una simulación de lo que ocurriría si los inputs se llenaran dinámicamente
+          echo "Seleccionando una opción de lista1: ${{ github.event.inputs.lista1 }}"
+          echo "Seleccionando una opción de lista2: ${{ github.event.inputs.lista2 }}"
