@@ -75,4 +75,4 @@ jobs:
           git commit -m "Actualizar inputs de lista1 y lista2"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TK_ALL }}
