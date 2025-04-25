@@ -1,0 +1,42 @@
+name: Accion con Desplegable
+
+on:
+  workflow_dispatch:
+    inputs:
+      opcion:
+        description: 'Selecciona una accion'
+        required: true
+        default: 'accion1'
+        type: choice
+        options:
+          - accion1
+          - accion2
+          - accion3
+
+jobs:
+  ejecutar_accion:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mostrar accion seleccionada
+        run: |
+          opcion="${{ github.event.inputs.opcion }}"
+          echo "Has seleccionado: $opcion"
+
+      - name: Ejecutar acción correspondiente
+        run: |
+          opcion="${{ github.event.inputs.opcion }}"
+          case "$opcion" in
+            accion1)
+              echo "Ejecutando acción 1..."
+              ;;
+            accion2)
+              echo "Ejecutando acción 2..."
+              ;;
+            accion3)
+              echo "Ejecutando acción 3..."
+              ;;
+            *)
+              echo "Opción no reconocida"
+              exit 1
+              ;;
+          esac
