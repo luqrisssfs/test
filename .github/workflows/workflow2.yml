@@ -1,0 +1,32 @@
+name: Segundo Workflow - Selección de listas
+
+on:
+  workflow_dispatch:
+    inputs:
+      lista1:
+        description: 'Selecciona una opción de lista1'
+        required: true
+        type: choice
+        options:
+          - "Opción predeterminada 1"
+          - "Opción predeterminada 2"
+      lista2:
+        description: 'Selecciona una opción de lista2'
+        required: true
+        type: choice
+        options:
+          - "Opción predeterminada A"
+          - "Opción predeterminada B"
+
+jobs:
+  job2:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      - name: Imprimir las opciones seleccionadas
+        run: |
+          echo "Lista1 seleccionada: ${{ github.event.inputs.lista1 }}"
+          echo "Lista2 seleccionada: ${{ github.event.inputs.lista2 }}"
