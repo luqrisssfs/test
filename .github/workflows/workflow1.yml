@@ -1,9 +1,13 @@
-name: Primer Workflow - Leer y actualizar el YAMl
+name: Primer Workflow - Leer y actualizar el YAML
 
 on:
   push:
     branches:
       - main
+
+permissions:
+  contents: write   # Permisos para modificar archivos, incluidos los workflows
+  workflows: write  # Permisos específicos para modificar workflows
 
 jobs:
   leer_archivos:
